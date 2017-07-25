@@ -13,40 +13,40 @@ import java.util.concurrent.TimeUnit;
 public class YandexDiskTest {
     private final String BASE_URL = "https://disk.yandex.ru";
     private WebDriver driver;
-//    MainPage mainPage = new MainPage(driver);
-//    LoginPage loginPage = new LoginPage(driver);
+    private MainPage mainPage = new MainPage();
+    private LoginPage loginPage = new LoginPage();
 
 
     public String[] arrayOfFileName =
             {"1426364091_412325540.jpg","418034.jpg", "Rogue-One-Star-Wars-Story-Main-Characters.jpg",
             "izgoj-odin-zvezdnye-vojny-istorii-2016-48.jpg", "maxresdefault (1).jpg", "maxresdefault.jpg", "starwarsrogueone_1t.jpg", "Море.jpg"};
 
-    @BeforeClass
-    public void loadStartPage() {
-        System.setProperty("webdriver.chrome.driver", "driverbinaries/chromedriver.exe");
-        driver = new ChromeDriver();
-        driver.manage().timeouts().pageLoadTimeout(15, TimeUnit.SECONDS);
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        driver.manage().window().maximize();
-    }
+//    @BeforeClass
+//    public void loadStartPage() {
+//        System.setProperty("webdriver.chrome.driver", "driverbinaries/chromedriver.exe");
+//        driver = new ChromeDriver();
+//        driver.manage().timeouts().pageLoadTimeout(15, TimeUnit.SECONDS);
+//        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+//        driver.manage().window().maximize();
+//    }
 
     @Test(description = "Login to Yandex Disk")
     public void loginToYandex(){
-        LoginPage loginPage = new LoginPage(driver);
+//        LoginPage loginPage = new LoginPage(driver);
         loginPage.open(BASE_URL);
         loginPage.login();
     }
 
     @Test(dependsOnMethods = "loginToYandex", description = "Preview picture")
     public void chooseAndPreview() throws InterruptedException {
-        MainPage mainPage = new MainPage(driver);
+//        MainPage mainPage = new MainPage(driver);
         mainPage.changeView();
         Thread.sleep(20000);
     }
 
     @Test(dependsOnMethods = "chooseAndPreview", description = "Selecting test")
     public void selectPictures(){
-        MainPage mainPage = new MainPage(driver);
+//        MainPage mainPage = new MainPage(driver);
         mainPage.selectItems();
     }
 
@@ -54,14 +54,14 @@ public class YandexDiskTest {
     @Test(dependsOnMethods = "selectPictures", description = "Drag picture to folder")
     public void dragPicture() throws InterruptedException {
         Thread.sleep(20000);
-        MainPage mainPage = new MainPage(driver);
+//        MainPage mainPage = new MainPage(driver);
         mainPage.dragNDropPicture();
     }
 
     @Test(dependsOnMethods = "dragPicture", description = "Open folder")
     public void openFolder() throws InterruptedException {
         Thread.sleep(20000);
-        MainPage mainPage = new MainPage(driver);
+//        MainPage mainPage = new MainPage(driver);
         mainPage.doubleClicking();
     }
 //

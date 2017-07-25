@@ -28,9 +28,9 @@ public class MainPage extends AbstractPage{
     @FindBy(xpath = "//div[@data-nb='resource' and @title='TestingFolder']")
     WebElement targetFolder;
 
-    public MainPage(WebDriver driver){
-        super(driver);
-    }
+//    public MainPage(WebDriver driver){
+//        super(driver);
+//    }
 
     public MainPage changeView(){
         iconsRadioButton.click();
@@ -44,18 +44,18 @@ public class MainPage extends AbstractPage{
 
     public MainPage selectItems() {
 //        Thread.sleep(20000);
-        Actions actions = new Actions(driver);
+        Actions actions = new Actions(Driver.getDriverInstance());
         actions.clickAndHold(listPicture.get(0)).moveToElement(listPicture.get(3)).release().build().perform();
         return this;
     }
 
     public MainPage dragNDropPicture(){
-        Actions actions = new Actions(driver);
+        Actions actions = new Actions(Driver.getDriverInstance());
         actions.dragAndDrop(listPicture.get(2),targetFolder).build().perform();
         return this;
     }
     public MainPage doubleClicking(){
-        Actions actions = new Actions(driver);
+        Actions actions = new Actions(Driver.getDriverInstance());
         actions.doubleClick(targetFolder).doubleClick().perform();
         return this;
     }

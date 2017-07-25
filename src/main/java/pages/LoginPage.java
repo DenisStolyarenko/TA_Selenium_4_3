@@ -3,6 +3,7 @@ package pages;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import services.Driver;
 
 public class LoginPage extends AbstractPage{
     private final String userName = "cool.tests2018";
@@ -17,12 +18,12 @@ public class LoginPage extends AbstractPage{
     @FindBy(xpath = ".//button[@type='submit' and @role='button']")
     WebElement loginButton;
 
-    public LoginPage(WebDriver driver){
-        super(driver);
-    }
+//    public LoginPage(WebDriver driver){
+//        super(driver);
+//    }
 
     public LoginPage open(String BASE_URL){
-        driver.get(BASE_URL);
+        Driver.getDriverInstance().get(BASE_URL);
         return this;
     }
 
@@ -30,6 +31,6 @@ public class LoginPage extends AbstractPage{
         userNameInput.sendKeys(userName);
         passwordInput.sendKeys(pwdName);
         loginButton.click();
-        return new MainPage(driver);
+        return new MainPage();
     }
 }
