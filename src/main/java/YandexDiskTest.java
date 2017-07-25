@@ -42,12 +42,6 @@ public class YandexDiskTest {
         MainPage mainPage = new MainPage(driver);
         mainPage.changeView();
         Thread.sleep(20000);
-//        mainPage.selectItems();
-//        System.out.println(mainPage.getPictureName());
-//        mainPage.hideLastLoadedFiles();
-////        MainPage mainPage = new MainPage().closePromo().closeSaveTimeWindow().hideLastLoadedFiles().changeViewOfFiles();
-////        MainPage mainPage = new MainPage().changeViewOfFiles();
-//
     }
 
     @Test(dependsOnMethods = "chooseAndPreview", description = "Selecting test")

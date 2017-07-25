@@ -13,17 +13,6 @@ import javax.swing.*;
 import java.util.List;
 
 public class MainPage extends AbstractPage{
-//    private final By HEADER_USERNAME_LOCATOR = By.xpath("//div[@class='header__user']/span[@class='header__username']");
-//    private final By EXIT_LOCATOR = By.xpath("//a[@role='link' and contains(@href,'https://passport.yandex.ru?mode=logout')]");
-//    private final By PROMO_LOCATOR = By.xpath("//div[@class='create-resource-popup-with-anchor__promo-office-shade']");
-//    private final By VIEW_RADIO_BUTTON_LOCATOR = By.xpath("//input[@class='radio-button__control']");
-//    private final By TILE_RADIO_BUTTON_LOCATOR = By.xpath("//input[@class='radio-button__control' and @value='tile']");
-//    private final By ICONS_RADIO_BUTTON_LOCATOR = By.xpath("//input[@class='radio-button__control' and @value='icons']");
-//    private final By LIST_RADIO_BUTTON_LOCATOR = By.xpath("//input[@class='radio-button__control' and @value='list']");
-//    private final By HIDE_SHOW_LAST_LOADED_FILES_LOCATOR = By.xpath("//div[@class='toolset__children']/button[1]");
-//    private final By CLOSE_SAVE_TIME_WINDOW_LOCATOR = By.xpath("//div[@class='_nb-popup-i']/a");
-//    private final By SAVE_TIME_WINDOW_LOCATOR = By.xpath("//div[@class='_nb-popup-content']");
-
     @FindBy(xpath = ".//input[@class='radio-button__control' and @value='icons']")
     WebElement iconsRadioButton;
 
@@ -50,7 +39,6 @@ public class MainPage extends AbstractPage{
     }
 
     public String getPictureName(){
-
         return listPicture.get(0).getAttribute("title").toString();
     }
 
