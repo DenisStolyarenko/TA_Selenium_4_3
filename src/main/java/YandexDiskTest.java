@@ -26,7 +26,6 @@ public class YandexDiskTest {
     public void loginToYandex(){
         loginPage.open(BASE_URL);
         loginPage.login();
-//        System.out.println(loginPage.getLoggedUserName());
         Assert.assertTrue(loginPage.isUserLogged(), "User is not logged");
     }
 
@@ -42,11 +41,12 @@ public class YandexDiskTest {
     }
 
     @Test(dependsOnMethods = "dragPicture", description = "Open folder")
-    public void openFolder(){
+    public void openFolderbyDoubleClick(){
         mainPage.doubleClicking();
+        Assert.assertTrue(mainPage.checkURLofPage("TestingFolder"),"Folder is not found" );
     }
 
-    @Test(dependsOnMethods = "openFolder", description = "Remove picture")
+    @Test(dependsOnMethods = "openFolderbyDoubleClick", description = "Remove picture")
     public void removePicture(){
         mainPage.goToBaseFolder();
         mainPage.dragNDropToTrash();
@@ -55,6 +55,7 @@ public class YandexDiskTest {
     @Test(dependsOnMethods = "removePicture", description = "Logout from Yandex Disk")
     public void logoutFromYandex(){
         mainPage.logOut();
+        Assert.assertTrue(loginPage.isUserNameInputPresent(),"Logout failed");
     }
 
     @AfterClass(description = "Close browser")

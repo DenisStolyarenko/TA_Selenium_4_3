@@ -36,7 +36,7 @@ public abstract class AbstractPage {
     }
 
     protected void highlightElement(WebElement element) {
-        ((JavascriptExecutor) Driver.getDriverInstance()).executeScript("arguments[0].style.border='3px solid yellow'", element);
+        ((JavascriptExecutor) Driver.getDriverInstance()).executeScript("arguments[0].style.border='3px solid green'", element);
     }
 
     protected void unHighlightElement(WebElement element) {

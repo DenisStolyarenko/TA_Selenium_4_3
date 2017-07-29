@@ -44,4 +44,10 @@ public class LoginPage extends AbstractPage{
             return true;
         } else return false;
     }
+
+    public boolean isUserNameInputPresent(){
+        if (userNameInput.isDisplayed()){
+            return true;
+        } else return false;
+    }
 }
