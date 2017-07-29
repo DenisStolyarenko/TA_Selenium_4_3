@@ -1,3 +1,4 @@
+import org.apache.xpath.SourceTree;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
@@ -16,12 +17,6 @@ public class YandexDiskTest {
     private MainPage mainPage = new MainPage();
     private LoginPage loginPage = new LoginPage();
 
-
-    public String[] arrayOfFileName =
-            {"1426364091_412325540.jpg","418034.jpg", "Rogue-One-Star-Wars-Story-Main-Characters.jpg",
-            "izgoj-odin-zvezdnye-vojny-istorii-2016-48.jpg", "maxresdefault (1).jpg", "maxresdefault.jpg", "starwarsrogueone_1t.jpg", "Море.jpg"};
-
-
     @Test(description = "Login to Yandex Disk")
     public void loginToYandex(){
         loginPage.open(BASE_URL);
@@ -37,19 +32,28 @@ public class YandexDiskTest {
 
     @Test(dependsOnMethods = "selectPictures", description = "Drag picture to folder")
     public void dragPicture(){
+        int i = mainPage.openFolder("TestingFolder").checkCountFilesInFolder();
+        mainPage.goToBaseFolder();
         mainPage.dragNDropPicture();
+        int j = mainPage.openFolder("TestingFolder").checkCountFilesInFolder();
+        Assert.assertNotEquals(i, j , "Failed");
     }
 
     @Test(dependsOnMethods = "dragPicture", description = "Open folder")
     public void openFolderbyDoubleClick(){
-        mainPage.doubleClicking();
+        mainPage.goToBaseFolder();
+        mainPage.openFolder("TestingFolder");
         Assert.assertTrue(mainPage.checkURLofPage("TestingFolder"),"Folder is not found" );
     }
 
     @Test(dependsOnMethods = "openFolderbyDoubleClick", description = "Remove picture")
     public void removePicture(){
         mainPage.goToBaseFolder();
+        int i = mainPage.openFolder("Корзина").checkCountFilesInFolder();
+        mainPage.goToBaseFolder();
         mainPage.dragNDropToTrash();
+        int j = mainPage.openFolder("Корзина").checkCountFilesInFolder();
+        Assert.assertNotEquals(i, j , "Removing is failed");
     }
 
     @Test(dependsOnMethods = "removePicture", description = "Logout from Yandex Disk")

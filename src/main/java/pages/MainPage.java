@@ -1,6 +1,5 @@
 package pages;
 
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
@@ -10,17 +9,20 @@ import services.Screenshoter;
 import java.util.List;
 
 public class MainPage extends AbstractPage{
-    @FindBy(xpath = ".//input[@class='radio-button__control' and @value='icons']")
+    @FindBy(xpath = "//input[@class='radio-button__control' and @value='icons']")
     private WebElement iconsRadioButton;
 
-    @FindBy(xpath = ".//input[@class='radio-button__control' and @value='tile']")
+    @FindBy(xpath = "//input[@class='radio-button__control' and @value='tile']")
     private WebElement tileRadioButton;
 
-    @FindBy(xpath = ".//input[@class='radio-button__control' and @value='list']")
+    @FindBy(xpath = "//input[@class='radio-button__control' and @value='list']")
     private WebElement listRadioButton;
 
-    @FindBy(xpath = ".//div[@data-nb='resource' and @data-ext='jpg']")
+    @FindBy(xpath = "//div[@data-nb='resource' and @data-ext='jpg']")
     private List<WebElement> listPicture;
+
+    @FindBy(xpath = "//div[@data-nb='resource']")
+    private List<WebElement> listInFolder;
 
     @FindBy(xpath = "//div[@data-nb='resource' and @title='TestingFolder']")
     private WebElement targetFolder;
@@ -37,11 +39,11 @@ public class MainPage extends AbstractPage{
     @FindBy(xpath = "//a[@id='/disk' and contains(text(),'Диск')]")
     private WebElement baseFolder;
 
+    @FindBy(xpath = "//span[@class='crumbs__current']")
+    private WebElement folderName;
+
     @FindBy(xpath = "//div[@class='b-progressbar__fill']")
     private WebElement progressBar;
-
-    @FindBy(xpath = "//span[@class='crumbs__current' and contains(text(),'TestingFolder')]")
-    private WebElement testFolder;
 
     public void changeView(){
         tileRadioButton.click();
@@ -57,7 +59,7 @@ public class MainPage extends AbstractPage{
         highlightElement(listPicture.get(0));
         Screenshoter.takeScreenshot();
         Actions actions = new Actions(Driver.getDriverInstance());
-        actions.clickAndHold(listPicture.get(0)).moveToElement(listPicture.get(3)).release().build().perform();
+        actions.clickAndHold(listPicture.get(0)).moveToElement(listPicture.get(1)).release().build().perform();
         unHighlightElement(listPicture.get(0));
         return this;
     }
@@ -66,14 +68,32 @@ public class MainPage extends AbstractPage{
         waitForElementEnabled(listPicture.get(2));
         Actions actions = new Actions(Driver.getDriverInstance());
         actions.dragAndDrop(listPicture.get(2),targetFolder).build().perform();
-        Screenshoter.takeScreenshot();
         return this;
     }
-    public MainPage doubleClicking(){
-        waitForElementVisibleEnabled(targetFolder);
+
+    public MainPage openFolderbyDoubleClicking(WebElement element){
+        waitForElementVisibleEnabled(element);
         Actions actions = new Actions(Driver.getDriverInstance());
-        actions.doubleClick(targetFolder).doubleClick().perform();
-        Screenshoter.takeScreenshot();
+        actions.doubleClick(element).doubleClick().perform();
+        return this;
+    }
+
+    public MainPage openFolder(String folderName){
+        switch (folderName){
+            case "TestingFolder":
+                openFolderbyDoubleClicking(targetFolder);
+                break;
+            case "Корзина":
+                openFolderbyDoubleClicking(trash);
+                break;
+            case "Trash":
+                openFolderbyDoubleClicking(trash);
+                break;
+            default:
+                System.out.println("Folder didn't find");
+                break;
+        }
+
         return this;
     }
 
@@ -81,7 +101,6 @@ public class MainPage extends AbstractPage{
         waitForElementVisibleEnabled(trash);
         Actions actions = new Actions(Driver.getDriverInstance());
         actions.dragAndDrop(listPicture.get(1),trash).build().perform();
-        Screenshoter.takeScreenshot();
         return this;
     }
 
@@ -99,17 +118,19 @@ public class MainPage extends AbstractPage{
         return new LoginPage();
     }
 
-//    public boolean isPresentFolder(){
-//        if (testFolder.isDisplayed()){
-//            return true;
-//        } else return false;
-//    }
 
     public boolean checkURLofPage(String value){
         String urlz = Driver.getDriverInstance().getCurrentUrl().toString();
-        if(urlz.contains(value)){
-            return true;
-        } else return false;
+        return urlz.contains(value);
     }
 
+    public String getFolderName(){
+        waitForElementVisible(folderName);
+        return folderName.getText();
+    }
+
+    public int checkCountFilesInFolder(){
+        waitForElementVisible(folderName);
+        return listInFolder.size();
+    }
 }
