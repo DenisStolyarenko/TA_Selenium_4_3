@@ -11,54 +11,55 @@ public class YandexDiskTest {
     private LoginPage loginPage = new LoginPage();
 
     @Test(description = "Login to Yandex Disk")
-    public void loginToYandex(){
+    public void loginToYandex() {
         loginPage.open(BASE_URL);
         loginPage.login();
         Assert.assertTrue(loginPage.isUserLogged(), "User is not logged");
     }
-//    @Test(dependsOnMethods = "loginToYandex", description = "Prepare for testing")
-//    public void prepareStep() throws InterruptedException {
-//        mainPage.recoveryFromTrash();
-//        mainPage.goToBaseFolder();
-//        Thread.sleep(15000);
-//    }
 
-    @Test(dependsOnMethods = "loginToYandex", description = "Selecting test")
-    public void selectPictures(){
+    @Test(dependsOnMethods = "loginToYandex", description = "Prepare for testing")
+    public void prepareStep() {
+        mainPage.recoveryFromTrash();
+        mainPage.goToBaseFolder();
+    }
+
+    @Test(dependsOnMethods = "prepareStep", description = "Selecting test")
+    public void selectPictures() throws InterruptedException {
         mainPage.changeView();
         mainPage.selectItemsWithShift();
+        Thread.sleep(15000);
     }
 
     @Test(dependsOnMethods = "selectPictures", description = "Drag picture to folder")
-    public void dragPicture(){
+    public void dragPicture() {
         int i = mainPage.openFolder("TestingFolder").checkCountFilesInFolder();
         mainPage.goToBaseFolder();
         mainPage.dragNDropPicture();
         int j = mainPage.openFolder("TestingFolder").checkCountFilesInFolder();
-        Assert.assertNotEquals(i, j , "Failed");
+        Assert.assertNotEquals(i, j, "Failed");
     }
 
     @Test(dependsOnMethods = "dragPicture", description = "Open folder")
-    public void openFolderbyDoubleClick(){
+    public void openFolderbyDoubleClick() {
         mainPage.goToBaseFolder();
         mainPage.openFolder("TestingFolder");
-        Assert.assertTrue(mainPage.checkURLofPage("TestingFolder"),"Folder is not found" );
+        Assert.assertTrue(mainPage.checkURLofPage("TestingFolder"), "Folder is not found");
     }
 
     @Test(dependsOnMethods = "openFolderbyDoubleClick", description = "Remove picture")
-    public void removePicture(){
+    public void removePicture() {
         mainPage.goToBaseFolder();
         int i = mainPage.openFolder("Корзина").checkCountFilesInFolder();
         mainPage.goToBaseFolder();
         mainPage.dragNDropToTrash();
         int j = mainPage.openFolder("Корзина").checkCountFilesInFolder();
-        Assert.assertNotEquals(i, j , "Removing is failed");
+        Assert.assertNotEquals(i, j, "Removing is failed");
     }
 
     @Test(dependsOnMethods = "removePicture", description = "Logout from Yandex Disk")
-    public void logoutFromYandex(){
+    public void logoutFromYandex() {
         mainPage.logOut();
-        Assert.assertTrue(loginPage.isUserNameInputPresent(),"Logout failed");
+        Assert.assertTrue(loginPage.isUserNameInputPresent(), "Logout failed");
     }
 
     @AfterClass(description = "Close browser")

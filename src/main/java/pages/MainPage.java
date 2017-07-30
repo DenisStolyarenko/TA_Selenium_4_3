@@ -49,8 +49,8 @@ public class MainPage extends AbstractPage{
     @FindBy(xpath = "//div[@class='b-progressbar__fill']")
     private WebElement progressBar;
 
-    @FindBy(xpath = ".//button[@data-click-action='resource.restore']")
-    private WebElement restoreElements;
+    @FindBy(xpath = "//button[contains(@data-params,'resource.restore')]")
+    private WebElement restoreButton;
 
     public void changeView(){
         tileRadioButton.click();
@@ -72,15 +72,23 @@ public class MainPage extends AbstractPage{
 
     public void recoveryFromTrash(){
         openFolder("Корзина");
+        if (listInFolder.size() > 0){
+            waitForElementVisible(listInFolder.get(0));
+            Actions actions = new Actions(Driver.getDriverInstance());
+            actions.click(listInFolder.get(0)).keyDown(Keys.SHIFT).click(listPicture.get(listInFolder.size() - 1)).keyUp(Keys.SHIFT).build().perform();
+            Screenshoter.takeScreenshot();
+            actions.click(restoreButton).build().perform();
+        }
+
 //        if (listInFolder.size() > 0){
 //            Actions actions = new Actions(Driver.getDriverInstance());
 //            actions.click(listInFolder.get(0)).keyDown(Keys.SHIFT).click(listPicture.get(listInFolder.size() - 1)).keyUp(Keys.SHIFT).release().build().perform();
 ////            waitForElementVisible(restoreElements);
-        Actions actions = new Actions(Driver.getDriverInstance());
-            while (listInFolder.size() > 0) {
-                listInFolder.get(0).click();
-                restoreElements.click();
-            }
+
+//            while (listInFolder.size() > 0) {
+//                listInFolder.get(0).click();
+//                restoreButton.click();
+//            }
 
 //            restoreElements.click();
 //        }
