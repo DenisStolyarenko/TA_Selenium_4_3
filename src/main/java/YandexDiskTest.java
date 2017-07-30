@@ -11,36 +11,44 @@ public class YandexDiskTest {
     private LoginPage loginPage = new LoginPage();
 
     @Test(description = "Login to Yandex Disk")
-    public void loginToYandex(){
+    public void loginToYandex() {
         loginPage.open(BASE_URL);
         loginPage.login();
         Assert.assertTrue(loginPage.isUserLogged(), "User is not logged");
     }
 
-    @Test(dependsOnMethods = "loginToYandex", description = "Selecting test")
-    public void selectPictures(){
+    @Test(dependsOnMethods = "loginToYandex", description = "Prepare for testing")
+    public void prepareStep() {
+        mainPage.recoveryFromTrash();
+        mainPage.goToBaseFolder();
+//        mainPage.cleanWorkingFolder("TestingFolder");
+//        mainPage.goToBaseFolder();
+    }
+
+    @Test(dependsOnMethods = "prepareStep", description = "Selecting test")
+    public void selectPictures() throws InterruptedException {
         mainPage.changeView();
         mainPage.selectItemsWithShift();
     }
 
     @Test(dependsOnMethods = "selectPictures", description = "Drag picture to folder")
-    public void dragPicture(){
+    public void dragPicture() {
         int i = mainPage.openFolder("TestingFolder").checkCountFilesInFolder();
         mainPage.goToBaseFolder();
         mainPage.dragNDropPicture();
         int j = mainPage.openFolder("TestingFolder").checkCountFilesInFolder();
-        Assert.assertNotEquals(i, j , "Failed");
+        Assert.assertNotEquals(i, j, "Failed");
     }
 
     @Test(dependsOnMethods = "dragPicture", description = "Open folder")
-    public void openFolderbyDoubleClick(){
+    public void openFolderbyDoubleClick() {
         mainPage.goToBaseFolder();
         mainPage.openFolder("TestingFolder");
-        Assert.assertTrue(mainPage.checkURLofPage("TestingFolder"),"Folder is not found" );
+        Assert.assertTrue(mainPage.checkURLofPage("TestingFolder"), "Folder is not found");
     }
 
     @Test(dependsOnMethods = "openFolderbyDoubleClick", description = "Remove picture")
-    public void removePicture(){
+    public void removePicture() {
         mainPage.goToBaseFolder();
         int i = mainPage.openFolder("Корзина").checkCountFilesInFolder();
         mainPage.goToBaseFolder();

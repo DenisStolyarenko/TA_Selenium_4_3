@@ -9,13 +9,13 @@ public class LoginPage extends AbstractPage{
     private final String userName = "cool.tests2018";
     private final String pwdName = "1q2w3e4r5T";
 
-    @FindBy(xpath = ".//input[@name='login']")
+    @FindBy(xpath = "//input[@name='login']")
     private WebElement userNameInput;
 
-    @FindBy(xpath = ".//input[@name='password']")
+    @FindBy(xpath = "//input[@name='password']")
     private WebElement passwordInput;
 
-    @FindBy(xpath = ".//button[@type='submit' and @role='button']")
+    @FindBy(xpath = "//button[@type='submit' and @role='button']")
     private WebElement loginButton;
 
     @FindBy(xpath = "//span[@class='header__username']")
