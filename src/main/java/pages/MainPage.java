@@ -64,7 +64,7 @@ public class MainPage extends AbstractPage{
     public MainPage selectItemsWithShift(){
         waitForElementVisible(listPicture.get(0));
         Actions actions = new Actions(Driver.getDriverInstance());
-        actions.click(listPicture.get(0)).keyDown(Keys.SHIFT).click(listPicture.get(2)).keyUp(Keys.SHIFT).release().build().perform();
+        actions.click(listPicture.get(0)).keyDown(Keys.SHIFT).click(listPicture.get(2)).keyUp(Keys.SHIFT).build().perform();
         Screenshoter.takeScreenshot();
         return this;
     }
@@ -80,7 +80,7 @@ public class MainPage extends AbstractPage{
     public MainPage openFolderbyDoubleClicking(WebElement element){
         waitForElementVisibleEnabled(element);
         Actions actions = new Actions(Driver.getDriverInstance());
-        actions.doubleClick(element).doubleClick().perform();
+        actions.doubleClick(element).doubleClick().build().perform();
         return this;
     }
 
