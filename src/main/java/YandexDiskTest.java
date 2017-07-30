@@ -1,16 +1,9 @@
-import org.apache.xpath.SourceTree;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import pages.LoginPage;
 import pages.MainPage;
-import services.Screenshoter;
 import services.Driver;
-
-import java.util.concurrent.TimeUnit;
 
 public class YandexDiskTest {
     private final String BASE_URL = "https://disk.yandex.ru";
@@ -23,11 +16,17 @@ public class YandexDiskTest {
         loginPage.login();
         Assert.assertTrue(loginPage.isUserLogged(), "User is not logged");
     }
+//    @Test(dependsOnMethods = "loginToYandex", description = "Prepare for testing")
+//    public void prepareStep() throws InterruptedException {
+//        mainPage.recoveryFromTrash();
+//        mainPage.goToBaseFolder();
+//        Thread.sleep(15000);
+//    }
 
     @Test(dependsOnMethods = "loginToYandex", description = "Selecting test")
     public void selectPictures(){
         mainPage.changeView();
-        mainPage.selectItems();
+        mainPage.selectItemsWithShift();
     }
 
     @Test(dependsOnMethods = "selectPictures", description = "Drag picture to folder")

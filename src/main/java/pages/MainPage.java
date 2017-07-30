@@ -1,5 +1,6 @@
 package pages;
 
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
@@ -39,11 +40,17 @@ public class MainPage extends AbstractPage{
     @FindBy(xpath = "//a[@id='/disk' and contains(text(),'Диск')]")
     private WebElement baseFolder;
 
+    @FindBy(xpath = "//div[@class='b-aside-tree__inner-line' and contains(text(),'Яндекс.Диск')]]")
+    private WebElement yandexDiskFolder;
+
     @FindBy(xpath = "//span[@class='crumbs__current']")
-    private WebElement folderName;
+    private WebElement folderNameElement;
 
     @FindBy(xpath = "//div[@class='b-progressbar__fill']")
     private WebElement progressBar;
+
+    @FindBy(xpath = ".//button[@data-click-action='resource.restore']")
+    private WebElement restoreElements;
 
     public void changeView(){
         tileRadioButton.click();
@@ -54,18 +61,42 @@ public class MainPage extends AbstractPage{
         return listPicture.get(0).getAttribute("title").toString();
     }
 
-    public MainPage selectItems() {
-        waitForElementVisible(listPicture.get(0));
-        highlightElement(listPicture.get(0));
-        Screenshoter.takeScreenshot();
+    public MainPage cleanFolder(String folderName){
+        openFolder(folderName);
         Actions actions = new Actions(Driver.getDriverInstance());
-        actions.clickAndHold(listPicture.get(0)).moveToElement(listPicture.get(1)).release().build().perform();
-        unHighlightElement(listPicture.get(0));
+        if (listInFolder.size() > 0) {
+            actions.dragAndDrop(listInFolder.get(0),yandexDiskFolder).build().perform();
+        }
+        return this;
+    }
+
+    public void recoveryFromTrash(){
+        openFolder("Корзина");
+//        if (listInFolder.size() > 0){
+//            Actions actions = new Actions(Driver.getDriverInstance());
+//            actions.click(listInFolder.get(0)).keyDown(Keys.SHIFT).click(listPicture.get(listInFolder.size() - 1)).keyUp(Keys.SHIFT).release().build().perform();
+////            waitForElementVisible(restoreElements);
+        Actions actions = new Actions(Driver.getDriverInstance());
+            while (listInFolder.size() > 0) {
+                listInFolder.get(0).click();
+                restoreElements.click();
+            }
+
+//            restoreElements.click();
+//        }
+    }
+
+    public MainPage selectItemsWithShift(){
+        waitForElementVisible(listPicture.get(0));
+        Actions actions = new Actions(Driver.getDriverInstance());
+        actions.click(listPicture.get(0)).keyDown(Keys.SHIFT).click(listPicture.get(2)).keyUp(Keys.SHIFT).release().build().perform();
+        Screenshoter.takeScreenshot();
         return this;
     }
 
     public MainPage dragNDropPicture(){
         waitForElementEnabled(listPicture.get(2));
+        highlightElement(listPicture.get(2));
         Actions actions = new Actions(Driver.getDriverInstance());
         actions.dragAndDrop(listPicture.get(2),targetFolder).build().perform();
         return this;
@@ -125,12 +156,12 @@ public class MainPage extends AbstractPage{
     }
 
     public String getFolderName(){
-        waitForElementVisible(folderName);
-        return folderName.getText();
+        waitForElementVisible(folderNameElement);
+        return folderNameElement.getText();
     }
 
     public int checkCountFilesInFolder(){
-        waitForElementVisible(folderName);
+        waitForElementVisible(folderNameElement);
         return listInFolder.size();
     }
 }
