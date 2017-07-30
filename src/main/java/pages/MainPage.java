@@ -40,7 +40,10 @@ public class MainPage extends AbstractPage{
     @FindBy(xpath = "//a[@id='/disk' and contains(text(),'Диск')]")
     private WebElement baseFolder;
 
-    @FindBy(xpath = "//div[@class='b-aside-tree__inner-line' and contains(text(),'Яндекс.Диск')]]")
+    @FindBy(xpath = "//div[@class='nb-panel__content nb-panel__content_icon']")
+    private WebElement panelForAdditionalFolders;
+
+    @FindBy(xpath = "//div[@class='b-aside-tree__inner-line' and contains(text(),'Яндекс.Диск')]")
     private WebElement yandexDiskFolder;
 
     @FindBy(xpath = "//span[@class='crumbs__current']")
@@ -49,7 +52,7 @@ public class MainPage extends AbstractPage{
     @FindBy(xpath = "//div[@class='b-progressbar__fill']")
     private WebElement progressBar;
 
-    @FindBy(xpath = "//button[contains(@data-params,'resource.restore')]")
+    @FindBy(xpath = "//span[@class='_nb-button-content' and contains(text(),'Восстановить')]")
     private WebElement restoreButton;
 
     public void changeView(){
@@ -61,37 +64,35 @@ public class MainPage extends AbstractPage{
         return listPicture.get(0).getAttribute("title").toString();
     }
 
-    public MainPage cleanFolder(String folderName){
-        openFolder(folderName);
-        Actions actions = new Actions(Driver.getDriverInstance());
-        if (listInFolder.size() > 0) {
-            actions.dragAndDrop(listInFolder.get(0),yandexDiskFolder).build().perform();
-        }
-        return this;
-    }
+//    public MainPage cleanWorkingFolder(String folderName){
+//        openFolder(folderName);
+//        Actions actions = new Actions(Driver.getDriverInstance());
+//        if (listInFolder.size() > 0) {
+////            actions.click(listInFolder.get(0)).keyDown(Keys.SHIFT).click(listPicture.get(listInFolder.size() - 1)).keyUp(Keys.SHIFT).build().perform();
+//            actions.click(listInFolder.get(0))
+//                    .keyDown(Keys.SHIFT)
+//                    .click(listPicture.get(listInFolder.size() - 1))
+//                    .keyUp(Keys.SHIFT)
+//                    .clickAndHold()
+//                    .moveToElement(panelForAdditionalFolders)
+//                    .release()
+//                    .build()
+//                    .perform();
+//        }
+//        return this;
+//    }
 
-    public void recoveryFromTrash(){
+    public MainPage recoveryFromTrash(){
         openFolder("Корзина");
         if (listInFolder.size() > 0){
             waitForElementVisible(listInFolder.get(0));
             Actions actions = new Actions(Driver.getDriverInstance());
             actions.click(listInFolder.get(0)).keyDown(Keys.SHIFT).click(listPicture.get(listInFolder.size() - 1)).keyUp(Keys.SHIFT).build().perform();
             Screenshoter.takeScreenshot();
+            waitForElementVisible(restoreButton);
             actions.click(restoreButton).build().perform();
         }
-
-//        if (listInFolder.size() > 0){
-//            Actions actions = new Actions(Driver.getDriverInstance());
-//            actions.click(listInFolder.get(0)).keyDown(Keys.SHIFT).click(listPicture.get(listInFolder.size() - 1)).keyUp(Keys.SHIFT).release().build().perform();
-////            waitForElementVisible(restoreElements);
-
-//            while (listInFolder.size() > 0) {
-//                listInFolder.get(0).click();
-//                restoreButton.click();
-//            }
-
-//            restoreElements.click();
-//        }
+        return this;
     }
 
     public MainPage selectItemsWithShift(){

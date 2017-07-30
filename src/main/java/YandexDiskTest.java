@@ -21,13 +21,14 @@ public class YandexDiskTest {
     public void prepareStep() {
         mainPage.recoveryFromTrash();
         mainPage.goToBaseFolder();
+//        mainPage.cleanWorkingFolder("TestingFolder");
+//        mainPage.goToBaseFolder();
     }
 
     @Test(dependsOnMethods = "prepareStep", description = "Selecting test")
     public void selectPictures() throws InterruptedException {
         mainPage.changeView();
         mainPage.selectItemsWithShift();
-        Thread.sleep(15000);
     }
 
     @Test(dependsOnMethods = "selectPictures", description = "Drag picture to folder")

@@ -23,6 +23,10 @@ public class Driver {
     private static WebDriver initDriver(){
         System.setProperty("webdriver.chrome.driver", "driverbinaries/chromedriver.exe");
         WebDriver driver = new ChromeDriver();
+//        System.setProperty("webdriver.gecko.driver", "driverbinaries/geckodriver.exe");
+//        WebDriver driver = new FirefoxDriver();
+//        System.setProperty("webdriver.ie.driver", "driverbinaries/IEDriverServer.exe");
+//        WebDriver driver = new InternetExplorerDriver();
         driver.manage().timeouts().pageLoadTimeout(PAGE_LOAD_DEFAULT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
         driver.manage().timeouts().implicitlyWait(COMMAND_DEFAULT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
         driver.manage().window().maximize();
