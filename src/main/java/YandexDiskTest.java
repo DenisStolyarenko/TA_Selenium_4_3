@@ -16,12 +16,6 @@ public class YandexDiskTest {
         loginPage.login();
         Assert.assertTrue(loginPage.isUserLogged(), "User is not logged");
     }
-//    @Test(dependsOnMethods = "loginToYandex", description = "Prepare for testing")
-//    public void prepareStep() throws InterruptedException {
-//        mainPage.recoveryFromTrash();
-//        mainPage.goToBaseFolder();
-//        Thread.sleep(15000);
-//    }
 
     @Test(dependsOnMethods = "loginToYandex", description = "Selecting test")
     public void selectPictures(){

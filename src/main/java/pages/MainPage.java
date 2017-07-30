@@ -10,43 +10,43 @@ import services.Screenshoter;
 import java.util.List;
 
 public class MainPage extends AbstractPage{
-    @FindBy(xpath = "//input[@class='radio-button__control' and @value='icons']")
+    @FindBy(xpath = ".//input[@class='radio-button__control' and @value='icons']")
     private WebElement iconsRadioButton;
 
-    @FindBy(xpath = "//input[@class='radio-button__control' and @value='tile']")
+    @FindBy(xpath = ".//input[@class='radio-button__control' and @value='tile']")
     private WebElement tileRadioButton;
 
-    @FindBy(xpath = "//input[@class='radio-button__control' and @value='list']")
+    @FindBy(xpath = ".//input[@class='radio-button__control' and @value='list']")
     private WebElement listRadioButton;
 
-    @FindBy(xpath = "//div[@data-nb='resource' and @data-ext='jpg']")
+    @FindBy(xpath = ".//div[@data-nb='resource' and @data-ext='jpg']")
     private List<WebElement> listPicture;
 
-    @FindBy(xpath = "//div[@data-nb='resource']")
+    @FindBy(xpath = ".//div[@data-nb='resource']")
     private List<WebElement> listInFolder;
 
-    @FindBy(xpath = "//div[@data-nb='resource' and @title='TestingFolder']")
+    @FindBy(xpath = ".//div[@data-nb='resource' and @title='TestingFolder']")
     private WebElement targetFolder;
 
-    @FindBy(xpath = "//div[@data-nb='resource' and @title='Корзина']")
+    @FindBy(xpath = ".//div[@data-nb='resource' and @title='Корзина']")
     private WebElement trash;
 
-    @FindBy(xpath = "//div[@class='header__user']/span[@class='header__username']")
+    @FindBy(xpath = ".//div[@class='header__user']/span[@class='header__username']")
     private WebElement headerUser;
 
-    @FindBy(xpath = "//a[@role='link' and contains(@href,'https://passport.yandex.ru?mode=logout')]")
+    @FindBy(xpath = ".//a[@role='link' and contains(@href,'https://passport.yandex.ru?mode=logout')]")
     private WebElement exitButton;
 
-    @FindBy(xpath = "//a[@id='/disk' and contains(text(),'Диск')]")
+    @FindBy(xpath = ".//a[@id='/disk' and contains(text(),'Диск')]")
     private WebElement baseFolder;
 
     @FindBy(xpath = "//div[@class='b-aside-tree__inner-line' and contains(text(),'Яндекс.Диск')]]")
     private WebElement yandexDiskFolder;
 
-    @FindBy(xpath = "//span[@class='crumbs__current']")
+    @FindBy(xpath = ".//span[@class='crumbs__current']")
     private WebElement folderNameElement;
 
-    @FindBy(xpath = "//div[@class='b-progressbar__fill']")
+    @FindBy(xpath = ".//div[@class='b-progressbar__fill']")
     private WebElement progressBar;
 
     @FindBy(xpath = ".//button[@data-click-action='resource.restore']")
@@ -61,31 +61,6 @@ public class MainPage extends AbstractPage{
         return listPicture.get(0).getAttribute("title").toString();
     }
 
-    public MainPage cleanFolder(String folderName){
-        openFolder(folderName);
-        Actions actions = new Actions(Driver.getDriverInstance());
-        if (listInFolder.size() > 0) {
-            actions.dragAndDrop(listInFolder.get(0),yandexDiskFolder).build().perform();
-        }
-        return this;
-    }
-
-    public void recoveryFromTrash(){
-        openFolder("Корзина");
-//        if (listInFolder.size() > 0){
-//            Actions actions = new Actions(Driver.getDriverInstance());
-//            actions.click(listInFolder.get(0)).keyDown(Keys.SHIFT).click(listPicture.get(listInFolder.size() - 1)).keyUp(Keys.SHIFT).release().build().perform();
-////            waitForElementVisible(restoreElements);
-        Actions actions = new Actions(Driver.getDriverInstance());
-            while (listInFolder.size() > 0) {
-                listInFolder.get(0).click();
-                restoreElements.click();
-            }
-
-//            restoreElements.click();
-//        }
-    }
-
     public MainPage selectItemsWithShift(){
         waitForElementVisible(listPicture.get(0));
         Actions actions = new Actions(Driver.getDriverInstance());
@@ -95,10 +70,10 @@ public class MainPage extends AbstractPage{
     }
 
     public MainPage dragNDropPicture(){
-        waitForElementEnabled(listPicture.get(2));
-        highlightElement(listPicture.get(2));
+        waitForElementEnabled(listPicture.get(listPicture.size() - 2));
+        highlightElement(listPicture.get(listPicture.size() - 2));
         Actions actions = new Actions(Driver.getDriverInstance());
-        actions.dragAndDrop(listPicture.get(2),targetFolder).build().perform();
+        actions.dragAndDrop(listPicture.get(listPicture.size() - 2),targetFolder).build().perform();
         return this;
     }
 
