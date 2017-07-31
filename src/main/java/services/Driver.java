@@ -23,7 +23,7 @@ public class Driver {
     private static WebDriver initDriver(){
         System.setProperty("webdriver.chrome.driver", "driverbinaries/chromedriver.exe");
         WebDriver driver = new ChromeDriver();
-//        System.setProperty("webdriver.gecko.driver", "driverbinaries/geckodriver.exe");
+//        System.setProperty("webdriver.gecko.driver", "driverbinaries/geckodriver.exe");//todo Убрать закомментированный код отовсюду
 //        WebDriver driver = new FirefoxDriver();
 //        System.setProperty("webdriver.ie.driver", "driverbinaries/IEDriverServer.exe");
 //        WebDriver driver = new InternetExplorerDriver();

@@ -97,6 +97,9 @@ public class MainPage extends AbstractPage{
 
     public MainPage selectItemsWithShift(){
         waitForElementVisible(listPicture.get(0));
+        //todo Код с Action'ами необходимо вынести в отдельный утильный класс.
+        //todo В таком случае можно будет вызывать уже подготовленный метод, только передавая в него нужные параметры.
+        //todo Данное замечание относится ко всем местам с вызовом Actions
         Actions actions = new Actions(Driver.getDriverInstance());
         actions.click(listPicture.get(0)).keyDown(Keys.SHIFT).click(listPicture.get(2)).keyUp(Keys.SHIFT).build().perform();
         Screenshoter.takeScreenshot();
@@ -111,6 +114,7 @@ public class MainPage extends AbstractPage{
         return this;
     }
 
+    //todo Метод по сути является утильным. Для него и подобных методов необходимо создать отдельный класс и вызывать его уже оттуда
     public MainPage openFolderbyDoubleClicking(WebElement element){
         waitForElementVisibleEnabled(element);
         Actions actions = new Actions(Driver.getDriverInstance());
@@ -118,12 +122,13 @@ public class MainPage extends AbstractPage{
         return this;
     }
 
+    //todo Для чего был создан данный метод? Почему нельзя было обойтись непосредственными вызовами метода openFolderbyDoubleClicking?
     public MainPage openFolder(String folderName){
         switch (folderName){
             case "TestingFolder":
                 openFolderbyDoubleClicking(targetFolder);
                 break;
-            case "Корзина":
+            case "Корзина"://todo Просмотреть примеры использования конструкции switch. Данная запись может быть сокращена (присутствует дублирующийся код)
                 openFolderbyDoubleClicking(trash);
                 break;
             case "Trash":
@@ -155,12 +160,15 @@ public class MainPage extends AbstractPage{
         headerUser.click();
         waitForElementVisible(exitButton);
         exitButton.click();
-        return new LoginPage();
+        return new LoginPage();//todo Чем обусловлен возврат именно этого объекта?
     }
 
 
+    //todo Метод слишком общий для данного класса. Необходимо его вынести в более глобальный класс для возможности переиспользования
+    //todo Плюс, в нем есть действия, которые не должны находиться в слое Пейдж Обжектов, а именно логика проверки.
+    //todo Метод нужно подкорректировать - распределить действия в нем по соответствующим слоям
     public boolean checkURLofPage(String value){
-        String urlz = Driver.getDriverInstance().getCurrentUrl().toString();
+        String urlz = Driver.getDriverInstance().getCurrentUrl().toString();//todo Код в данном методе можно сократить
         return urlz.contains(value);
     }
 
@@ -169,6 +177,7 @@ public class MainPage extends AbstractPage{
         return folderNameElement.getText();
     }
 
+    //todo Название метода не отражает его суть, т.е. оно некорректно
     public int checkCountFilesInFolder(){
         waitForElementVisible(folderNameElement);
         return listInFolder.size();

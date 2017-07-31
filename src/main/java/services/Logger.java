@@ -4,8 +4,8 @@ package services;
 import org.slf4j.LoggerFactory;
 
 public class Logger {
-    public static org.slf4j.Logger logger = LoggerFactory.getLogger(Logger.class);
-    public static void error(String message) {
+    public static org.slf4j.Logger logger = LoggerFactory.getLogger(Logger.class);//todo Почему не log4j?
+    public static void error(String message) {//todo Чем обусловлено создание всех данных методов?
         logger.error(message);
     }
 
