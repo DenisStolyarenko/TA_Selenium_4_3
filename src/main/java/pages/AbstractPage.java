@@ -39,6 +39,7 @@ public abstract class AbstractPage {
         ((JavascriptExecutor) Driver.getDriverInstance()).executeScript("arguments[0].style.border='3px solid green'", element);
     }
 
+    //todo Методы highlightElement и unHighlightElement выполняют одно и то же, содержат дублирующийся код. Их следует объединить в один
     protected void unHighlightElement(WebElement element) {
         ((JavascriptExecutor) Driver.getDriverInstance()).executeScript("arguments[0].style.border='0px'", element);
     }

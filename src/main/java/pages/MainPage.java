@@ -40,7 +40,10 @@ public class MainPage extends AbstractPage{
     @FindBy(xpath = "//a[@id='/disk' and contains(text(),'Диск')]")
     private WebElement baseFolder;
 
-    @FindBy(xpath = "//div[@class='b-aside-tree__inner-line' and contains(text(),'Яндекс.Диск')]]")
+    @FindBy(xpath = "//div[@class='nb-panel__content nb-panel__content_icon']")
+    private WebElement panelForAdditionalFolders;
+
+    @FindBy(xpath = "//div[@class='b-aside-tree__inner-line' and contains(text(),'Яндекс.Диск')]")
     private WebElement yandexDiskFolder;
 
     @FindBy(xpath = "//span[@class='crumbs__current']")
@@ -49,8 +52,8 @@ public class MainPage extends AbstractPage{
     @FindBy(xpath = "//div[@class='b-progressbar__fill']")
     private WebElement progressBar;
 
-    @FindBy(xpath = ".//button[@data-click-action='resource.restore']")
-    private WebElement restoreElements;
+    @FindBy(xpath = "//span[@class='_nb-button-content' and contains(text(),'Восстановить')]")
+    private WebElement restoreButton;
 
     public void changeView(){
         tileRadioButton.click();
@@ -61,35 +64,44 @@ public class MainPage extends AbstractPage{
         return listPicture.get(0).getAttribute("title").toString();
     }
 
-    public MainPage cleanFolder(String folderName){
-        openFolder(folderName);
-        Actions actions = new Actions(Driver.getDriverInstance());
-        if (listInFolder.size() > 0) {
-            actions.dragAndDrop(listInFolder.get(0),yandexDiskFolder).build().perform();
+//    public MainPage cleanWorkingFolder(String folderName){
+//        openFolder(folderName);
+//        Actions actions = new Actions(Driver.getDriverInstance());
+//        if (listInFolder.size() > 0) {
+////            actions.click(listInFolder.get(0)).keyDown(Keys.SHIFT).click(listPicture.get(listInFolder.size() - 1)).keyUp(Keys.SHIFT).build().perform();
+//            actions.click(listInFolder.get(0))
+//                    .keyDown(Keys.SHIFT)
+//                    .click(listPicture.get(listInFolder.size() - 1))
+//                    .keyUp(Keys.SHIFT)
+//                    .clickAndHold()
+//                    .moveToElement(panelForAdditionalFolders)
+//                    .release()
+//                    .build()
+//                    .perform();
+//        }
+//        return this;
+//    }
+
+    public MainPage recoveryFromTrash(){
+        openFolder("Корзина");
+        if (listInFolder.size() > 0){
+            waitForElementVisible(listInFolder.get(0));
+            Actions actions = new Actions(Driver.getDriverInstance());
+            actions.click(listInFolder.get(0)).keyDown(Keys.SHIFT).click(listPicture.get(listInFolder.size() - 1)).keyUp(Keys.SHIFT).build().perform();
+            Screenshoter.takeScreenshot();
+            waitForElementVisible(restoreButton);
+            actions.click(restoreButton).build().perform();
         }
         return this;
     }
 
-    public void recoveryFromTrash(){
-        openFolder("Корзина");
-//        if (listInFolder.size() > 0){
-//            Actions actions = new Actions(Driver.getDriverInstance());
-//            actions.click(listInFolder.get(0)).keyDown(Keys.SHIFT).click(listPicture.get(listInFolder.size() - 1)).keyUp(Keys.SHIFT).release().build().perform();
-////            waitForElementVisible(restoreElements);
-        Actions actions = new Actions(Driver.getDriverInstance());
-            while (listInFolder.size() > 0) {
-                listInFolder.get(0).click();
-                restoreElements.click();
-            }
-
-//            restoreElements.click();
-//        }
-    }
-
     public MainPage selectItemsWithShift(){
         waitForElementVisible(listPicture.get(0));
+        //todo Код с Action'ами необходимо вынести в отдельный утильный класс.
+        //todo В таком случае можно будет вызывать уже подготовленный метод, только передавая в него нужные параметры.
+        //todo Данное замечание относится ко всем местам с вызовом Actions
         Actions actions = new Actions(Driver.getDriverInstance());
-        actions.click(listPicture.get(0)).keyDown(Keys.SHIFT).click(listPicture.get(2)).keyUp(Keys.SHIFT).release().build().perform();
+        actions.click(listPicture.get(0)).keyDown(Keys.SHIFT).click(listPicture.get(2)).keyUp(Keys.SHIFT).build().perform();
         Screenshoter.takeScreenshot();
         return this;
     }
@@ -102,19 +114,21 @@ public class MainPage extends AbstractPage{
         return this;
     }
 
+    //todo Метод по сути является утильным. Для него и подобных методов необходимо создать отдельный класс и вызывать его уже оттуда
     public MainPage openFolderbyDoubleClicking(WebElement element){
         waitForElementVisibleEnabled(element);
         Actions actions = new Actions(Driver.getDriverInstance());
-        actions.doubleClick(element).doubleClick().perform();
+        actions.doubleClick(element).doubleClick().build().perform();
         return this;
     }
 
+    //todo Для чего был создан данный метод? Почему нельзя было обойтись непосредственными вызовами метода openFolderbyDoubleClicking?
     public MainPage openFolder(String folderName){
         switch (folderName){
             case "TestingFolder":
                 openFolderbyDoubleClicking(targetFolder);
                 break;
-            case "Корзина":
+            case "Корзина"://todo Просмотреть примеры использования конструкции switch. Данная запись может быть сокращена (присутствует дублирующийся код)
                 openFolderbyDoubleClicking(trash);
                 break;
             case "Trash":
@@ -146,12 +160,15 @@ public class MainPage extends AbstractPage{
         headerUser.click();
         waitForElementVisible(exitButton);
         exitButton.click();
-        return new LoginPage();
+        return new LoginPage();//todo Чем обусловлен возврат именно этого объекта?
     }
 
 
+    //todo Метод слишком общий для данного класса. Необходимо его вынести в более глобальный класс для возможности переиспользования
+    //todo Плюс, в нем есть действия, которые не должны находиться в слое Пейдж Обжектов, а именно логика проверки.
+    //todo Метод нужно подкорректировать - распределить действия в нем по соответствующим слоям
     public boolean checkURLofPage(String value){
-        String urlz = Driver.getDriverInstance().getCurrentUrl().toString();
+        String urlz = Driver.getDriverInstance().getCurrentUrl().toString();//todo Код в данном методе можно сократить
         return urlz.contains(value);
     }
 
@@ -160,6 +177,7 @@ public class MainPage extends AbstractPage{
         return folderNameElement.getText();
     }
 
+    //todo Название метода не отражает его суть, т.е. оно некорректно
     public int checkCountFilesInFolder(){
         waitForElementVisible(folderNameElement);
         return listInFolder.size();
