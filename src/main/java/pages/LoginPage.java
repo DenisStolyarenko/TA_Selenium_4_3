@@ -6,8 +6,6 @@ import services.Driver;
 import services.Screenshoter;
 
 public class LoginPage extends AbstractPage{
-    private final String userName = "cool.tests2018";
-    private final String pwdName = "1q2w3e4r5T";
 
     @FindBy(xpath = "//input[@name='login']")
     private WebElement userNameInput;
@@ -21,33 +19,24 @@ public class LoginPage extends AbstractPage{
     @FindBy(xpath = "//span[@class='header__username']")
     private WebElement headerUserName;
 
-    public LoginPage open(String BASE_URL){
-        Driver.getDriverInstance().get(BASE_URL);
-        return this;
-    }
-
-    public MainPage login(){
+    public void login(String BASE_URL, String userName, String pwdName){
+        open(BASE_URL);
         Screenshoter.takeScreenshot();
         userNameInput.sendKeys(userName);
         passwordInput.sendKeys(pwdName);
         loginButton.click();
         Screenshoter.takeScreenshot();
-        return new MainPage();
     }
 
     public String getLoggedUserName(){
         return headerUserName.getText();
     }
 
-    public boolean isUserLogged(){
-        if (getLoggedUserName().contains(userName)){
-            return true;
-        } else return false;
+    public boolean isUserLogged(String userName){
+        return getLoggedUserName().contains(userName);
     }
 
     public boolean isUserNameInputPresent(){
-        if (userNameInput.isDisplayed()){
-            return true;
-        } else return false;
+        return userNameInput.isDisplayed();
     }
 }

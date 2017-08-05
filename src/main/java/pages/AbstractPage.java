@@ -14,6 +14,10 @@ public abstract class AbstractPage {
         PageFactory.initElements(Driver.getDriverInstance(), this);
     }
 
+    protected void open(String BASE_URL){
+        Driver.getDriverInstance().get(BASE_URL);
+    }
+
     protected void waitForElementVisible(WebElement element){
         new WebDriverWait(Driver.getDriverInstance(), WAIT_FOR_ELEMENT_TIMEOUT_SECONDS).until(ExpectedConditions.visibilityOf(element));
     }
@@ -41,6 +45,10 @@ public abstract class AbstractPage {
 
     protected void unHighlightElement(WebElement element) {
         ((JavascriptExecutor) Driver.getDriverInstance()).executeScript("arguments[0].style.border='0px'", element);
+    }
+
+    public boolean checkURLofPage(String value){
+        return Driver.getDriverInstance().getCurrentUrl().toString().contains(value);
     }
 }
 

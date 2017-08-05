@@ -64,24 +64,6 @@ public class MainPage extends AbstractPage{
         return listPicture.get(0).getAttribute("title").toString();
     }
 
-//    public MainPage cleanWorkingFolder(String folderName){
-//        openFolder(folderName);
-//        Actions actions = new Actions(Driver.getDriverInstance());
-//        if (listInFolder.size() > 0) {
-////            actions.click(listInFolder.get(0)).keyDown(Keys.SHIFT).click(listPicture.get(listInFolder.size() - 1)).keyUp(Keys.SHIFT).build().perform();
-//            actions.click(listInFolder.get(0))
-//                    .keyDown(Keys.SHIFT)
-//                    .click(listPicture.get(listInFolder.size() - 1))
-//                    .keyUp(Keys.SHIFT)
-//                    .clickAndHold()
-//                    .moveToElement(panelForAdditionalFolders)
-//                    .release()
-//                    .build()
-//                    .perform();
-//        }
-//        return this;
-//    }
-
     public MainPage recoveryFromTrash(){
         openFolder("Корзина");
         if (listInFolder.size() > 0){
@@ -111,7 +93,7 @@ public class MainPage extends AbstractPage{
         return this;
     }
 
-    public MainPage openFolderbyDoubleClicking(WebElement element){
+    public MainPage makeDoubleClicking(WebElement element){
         waitForElementVisibleEnabled(element);
         Actions actions = new Actions(Driver.getDriverInstance());
         actions.doubleClick(element).doubleClick().build().perform();
@@ -121,13 +103,11 @@ public class MainPage extends AbstractPage{
     public MainPage openFolder(String folderName){
         switch (folderName){
             case "TestingFolder":
-                openFolderbyDoubleClicking(targetFolder);
+                makeDoubleClicking(targetFolder);
                 break;
             case "Корзина":
-                openFolderbyDoubleClicking(trash);
-                break;
             case "Trash":
-                openFolderbyDoubleClicking(trash);
+                makeDoubleClicking(trash);
                 break;
             default:
                 System.out.println("Folder didn't find");
@@ -158,19 +138,18 @@ public class MainPage extends AbstractPage{
         return new LoginPage();
     }
 
-
-    public boolean checkURLofPage(String value){
-        String urlz = Driver.getDriverInstance().getCurrentUrl().toString();
-        return urlz.contains(value);
-    }
-
     public String getFolderName(){
         waitForElementVisible(folderNameElement);
         return folderNameElement.getText();
     }
 
-    public int checkCountFilesInFolder(){
+    public int showCountFilesInFolder(){
         waitForElementVisible(folderNameElement);
         return listInFolder.size();
+    }
+
+    public void prepareStep() {
+        recoveryFromTrash();
+        goToBaseFolder();
     }
 }
