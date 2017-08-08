@@ -32,6 +32,7 @@ public class LoginPage extends AbstractPage{
         return headerUserName.getText();
     }
 
+    //todo метод относится к другому слою фреймворка -> перенести
     public boolean isUserLogged(String userName){
         return getLoggedUserName().contains(userName);
     }
