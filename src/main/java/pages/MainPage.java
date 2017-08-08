@@ -9,6 +9,7 @@ import services.Screenshoter;
 
 import java.util.List;
 
+//todo вынести весь код с экшенами из этого класса в отдельный утильный класс
 public class MainPage extends AbstractPage{
     @FindBy(xpath = "//input[@class='radio-button__control' and @value='icons']")
     private WebElement iconsRadioButton;
@@ -25,6 +26,10 @@ public class MainPage extends AbstractPage{
     @FindBy(xpath = "//div[@data-nb='resource']")
     private List<WebElement> listInFolder;
 
+    //todo хардкод имени папки! На будущее - привязываться к какому-то конкретному контенту нельзя. -->
+    //todo Иначе ты будешь привязан только к конкретному окружению. Да и вообще, в случае каких-либо изменений -->
+    //todo этого самого контента (что на практике очень часто происходит, ведь ты не единственный, -->
+    //todo кто работает с системой), тесты поломаются
     @FindBy(xpath = "//div[@data-nb='resource' and @title='TestingFolder']")
     private WebElement targetFolder;
 
@@ -93,6 +98,7 @@ public class MainPage extends AbstractPage{
         return this;
     }
 
+    //todo метод утильный. вынести его
     public MainPage makeDoubleClicking(WebElement element){
         waitForElementVisibleEnabled(element);
         Actions actions = new Actions(Driver.getDriverInstance());
@@ -100,6 +106,7 @@ public class MainPage extends AbstractPage{
         return this;
     }
 
+    //todo если назовешь хоть один аргумент в пользу полезности этого метода, то можешь его оставить
     public MainPage openFolder(String folderName){
         switch (folderName){
             case "TestingFolder":
@@ -135,7 +142,7 @@ public class MainPage extends AbstractPage{
         headerUser.click();
         waitForElementVisible(exitButton);
         exitButton.click();
-        return new LoginPage();
+        return new LoginPage();//todo почему ты возвращаешь новый объект страницы? Почему нельзя вернуть конкретно этот?
     }
 
     public String getFolderName(){
@@ -148,6 +155,7 @@ public class MainPage extends AbstractPage{
         return listInFolder.size();
     }
 
+    //todo переименовать, чтобы отражал суть
     public void prepareStep() {
         recoveryFromTrash();
         goToBaseFolder();
