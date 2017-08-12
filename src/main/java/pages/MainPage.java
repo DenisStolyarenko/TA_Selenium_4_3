@@ -1,11 +1,8 @@
 package pages;
 
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import services.ActionsOnObject;
-import services.Driver;
 import services.Screenshoter;
 
 import java.util.List;
@@ -72,18 +69,15 @@ public class MainPage extends AbstractPage {
 
     public void recoveryFromTrash() {
         actionsOnObject.recoveryPicture(trash, listInFolder, listPicture, restoreButton);
-//        return this;
     }
 
     public void selectItems() {
         actionsOnObject.selectItemsWithShift(listPicture);
-//        return this;
     }
 
 
     public void dragNDropPicture() {
         actionsOnObject.dragNDropPicture(listPicture, targetFolder, 2);
-//        return this;
     }
 
 
@@ -99,13 +93,11 @@ public class MainPage extends AbstractPage {
 
     public void dragNDropToTrash() {
         actionsOnObject.dragNDropPicture(listPicture, trash, 1);
-//        return this;
     }
 
     public void goToBaseFolder() {
         waitForElementVisibleEnabled(baseFolder);
         baseFolder.click();
-//        return this;
     }
 
     public void logOut() {
@@ -113,7 +105,6 @@ public class MainPage extends AbstractPage {
         headerUser.click();
         waitForElementVisible(exitButton);
         exitButton.click();
-//        return new LoginPage();
     }
 
     public String getFolderName() {
