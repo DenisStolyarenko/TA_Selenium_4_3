@@ -9,6 +9,8 @@ import services.Driver;
 
 public abstract class AbstractPage {
     private static final int WAIT_FOR_ELEMENT_TIMEOUT_SECONDS = 20;
+    protected String style1 = "'3px solid green'";
+    protected String style0 = "'0px'";
 
     protected AbstractPage(){
         PageFactory.initElements(Driver.getDriverInstance(), this);
@@ -39,16 +41,12 @@ public abstract class AbstractPage {
         new WebDriverWait(Driver.getDriverInstance(), WAIT_FOR_ELEMENT_TIMEOUT_SECONDS).until(ExpectedConditions.not(ExpectedConditions.visibilityOf(element)));
     }
 
-    protected void highlightElement(WebElement element) {
-        ((JavascriptExecutor) Driver.getDriverInstance()).executeScript("arguments[0].style.border='3px solid green'", element);
-    }
-
-    protected void unHighlightElement(WebElement element) {
-        ((JavascriptExecutor) Driver.getDriverInstance()).executeScript("arguments[0].style.border='0px'", element);
+    protected void changeHighlightingOfElement(WebElement element, String style){
+        ((JavascriptExecutor) Driver.getDriverInstance()).executeScript("arguments[0].style.border=" + style, element);
     }
 
     public boolean checkURLofPage(String value){
-        return Driver.getDriverInstance().getCurrentUrl().toString().contains(value);
+        return Driver.getDriverInstance().getCurrentUrl().contains(value);
     }
 }
 

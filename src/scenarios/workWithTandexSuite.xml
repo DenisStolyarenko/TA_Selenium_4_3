@@ -1,7 +1,7 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="First suite" verbose="1" parallel="false">
     <test name="YandexSuite">
-        <parameter name="BASE_URL" value="https://disk.yandex.ru"/>
+        <parameter name="base_url" value="https://disk.yandex.ru"/>
         <parameter name="userName" value="cool.tests2018"/>
         <parameter name="pwdName" value="1q2w3e4r5T"/>
         <classes>

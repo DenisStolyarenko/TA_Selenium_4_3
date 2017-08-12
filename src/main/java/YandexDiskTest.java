@@ -11,17 +11,17 @@ public class YandexDiskTest {
     private LoginPage loginPage = new LoginPage();
 
     @Test(description = "Login to Yandex Disk")
-    @Parameters({"BASE_URL","userName", "pwdName"})
-    public void loginToYandex(String BASE_URL, String userName, String pwdName) {
-        loginPage.login(BASE_URL, userName, pwdName);
-        mainPage.prepareStep();
-        Assert.assertTrue(loginPage.isUserLogged(userName), "User is not logged");
+    @Parameters({"base_url","userName", "pwdName"})
+    public void loginToYandex(String base_url, String userName, String pwdName) {
+        loginPage.login(base_url, userName, pwdName);
+        mainPage.restoreFilesForTesting();
+        Assert.assertTrue(mainPage.isUserLogged(userName), "User is not logged");
     }
 
     @Test(dependsOnMethods = "loginToYandex", description = "Selecting test")
     public void selectPictures() throws InterruptedException {
         mainPage.changeView();
-        mainPage.selectItemsWithShift();
+        mainPage.selectItems();
     }
 
     @Test(dependsOnMethods = "selectPictures", description = "Drag picture to folder")
@@ -33,22 +33,21 @@ public class YandexDiskTest {
     }
 
     @Test(dependsOnMethods = "checkResultOfDragPicture", description = "Open folder")
-    public void openFolderbyDoubleClick() {
+    public void checkOpeningFolder() {
         mainPage.openFolder("TestingFolder");
         Assert.assertTrue(mainPage.checkURLofPage("TestingFolder"), "Folder is not found");
     }
 
-    @Test(dependsOnMethods = "openFolderbyDoubleClick", description = "Remove picture")
-    public void movePicturesToTrash() {
+    @Test(dependsOnMethods = "checkOpeningFolder", description = "Remove picture")
+    public void checkRemovingPictures() {
         mainPage.goToBaseFolder();
         int i = mainPage.openFolder("Корзина").showCountFilesInFolder();
         mainPage.goToBaseFolder();
         mainPage.dragNDropToTrash();
-        int j = mainPage.openFolder("Корзина").showCountFilesInFolder();
-        Assert.assertNotEquals(i, j , "Removing is failed");
+        Assert.assertNotEquals(i, i + 1 , "Removing is failed");
     }
 
-    @Test(dependsOnMethods = "movePicturesToTrash", description = "Logout from Yandex Disk")
+    @Test(dependsOnMethods = "checkRemovingPictures", description = "Logout from Yandex Disk")
     public void logoutFromYandex(){
         mainPage.logOut();
         Assert.assertTrue(loginPage.isUserNameInputPresent(),"Logout failed");

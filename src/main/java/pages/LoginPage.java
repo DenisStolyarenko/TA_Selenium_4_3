@@ -2,7 +2,6 @@ package pages;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import services.Driver;
 import services.Screenshoter;
 
 public class LoginPage extends AbstractPage{
@@ -16,24 +15,19 @@ public class LoginPage extends AbstractPage{
     @FindBy(xpath = "//button[@type='submit' and @role='button']")
     private WebElement loginButton;
 
-    @FindBy(xpath = "//span[@class='header__username']")
-    private WebElement headerUserName;
 
     public void login(String BASE_URL, String userName, String pwdName){
         open(BASE_URL);
         Screenshoter.takeScreenshot();
+        changeHighlightingOfElement(userNameInput, style1);
         userNameInput.sendKeys(userName);
+        changeHighlightingOfElement(userNameInput, style0);
+        changeHighlightingOfElement(passwordInput, style1);
         passwordInput.sendKeys(pwdName);
+        changeHighlightingOfElement(passwordInput, style0);
+        changeHighlightingOfElement(loginButton, style1);
         loginButton.click();
         Screenshoter.takeScreenshot();
-    }
-
-    public String getLoggedUserName(){
-        return headerUserName.getText();
-    }
-
-    public boolean isUserLogged(String userName){
-        return getLoggedUserName().contains(userName);
     }
 
     public boolean isUserNameInputPresent(){

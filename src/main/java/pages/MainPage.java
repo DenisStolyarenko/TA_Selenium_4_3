@@ -4,12 +4,13 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
+import services.ActionsOnObject;
 import services.Driver;
 import services.Screenshoter;
 
 import java.util.List;
 
-public class MainPage extends AbstractPage{
+public class MainPage extends AbstractPage {
     @FindBy(xpath = "//input[@class='radio-button__control' and @value='icons']")
     private WebElement iconsRadioButton;
 
@@ -55,101 +56,86 @@ public class MainPage extends AbstractPage{
     @FindBy(xpath = "//span[@class='_nb-button-content' and contains(text(),'Восстановить')]")
     private WebElement restoreButton;
 
-    public void changeView(){
+    @FindBy(xpath = "//span[@class='header__username']")
+    private WebElement headerUserName;
+
+    ActionsOnObject actionsOnObject = new ActionsOnObject();
+
+    public void changeView() {
         tileRadioButton.click();
         Screenshoter.takeScreenshot();
     }
 
-    public String getPictureName(){
-        return listPicture.get(0).getAttribute("title").toString();
+    public String getPictureName() {
+        return listPicture.get(0).getAttribute("title");
     }
 
-    public MainPage recoveryFromTrash(){
-        openFolder("Корзина");
-        if (listInFolder.size() > 0){
-            waitForElementVisible(listInFolder.get(0));
-            Actions actions = new Actions(Driver.getDriverInstance());
-            actions.click(listInFolder.get(0)).keyDown(Keys.SHIFT).click(listPicture.get(listInFolder.size() - 1)).keyUp(Keys.SHIFT).build().perform();
-            Screenshoter.takeScreenshot();
-            waitForElementVisible(restoreButton);
-            actions.click(restoreButton).build().perform();
+    public void recoveryFromTrash() {
+        actionsOnObject.recoveryPicture(trash, listInFolder, listPicture, restoreButton);
+//        return this;
+    }
+
+    public void selectItems() {
+        actionsOnObject.selectItemsWithShift(listPicture);
+//        return this;
+    }
+
+
+    public void dragNDropPicture() {
+        actionsOnObject.dragNDropPicture(listPicture, targetFolder, 2);
+//        return this;
+    }
+
+
+    public MainPage openFolder(String folderName) {
+        for (int i = 0; i < listInFolder.size(); i++) {
+            if (listInFolder.get(i).getAttribute("title").contains(folderName)) {
+                actionsOnObject.makeDoubleClicking(listInFolder.get(i));
+            }
+
         }
         return this;
     }
 
-    public MainPage selectItemsWithShift(){
-        waitForElementVisible(listPicture.get(0));
-        Actions actions = new Actions(Driver.getDriverInstance());
-        actions.click(listPicture.get(0)).keyDown(Keys.SHIFT).click(listPicture.get(2)).keyUp(Keys.SHIFT).build().perform();
-        Screenshoter.takeScreenshot();
-        return this;
+    public void dragNDropToTrash() {
+        actionsOnObject.dragNDropPicture(listPicture, trash, 1);
+//        return this;
     }
 
-    public MainPage dragNDropPicture(){
-        waitForElementEnabled(listPicture.get(2));
-        highlightElement(listPicture.get(2));
-        Actions actions = new Actions(Driver.getDriverInstance());
-        actions.dragAndDrop(listPicture.get(2),targetFolder).build().perform();
-        return this;
-    }
-
-    public MainPage makeDoubleClicking(WebElement element){
-        waitForElementVisibleEnabled(element);
-        Actions actions = new Actions(Driver.getDriverInstance());
-        actions.doubleClick(element).doubleClick().build().perform();
-        return this;
-    }
-
-    public MainPage openFolder(String folderName){
-        switch (folderName){
-            case "TestingFolder":
-                makeDoubleClicking(targetFolder);
-                break;
-            case "Корзина":
-            case "Trash":
-                makeDoubleClicking(trash);
-                break;
-            default:
-                System.out.println("Folder didn't find");
-                break;
-        }
-
-        return this;
-    }
-
-    public MainPage dragNDropToTrash(){
-        waitForElementVisibleEnabled(trash);
-        Actions actions = new Actions(Driver.getDriverInstance());
-        actions.dragAndDrop(listPicture.get(1),trash).build().perform();
-        return this;
-    }
-
-    public MainPage goToBaseFolder(){
+    public void goToBaseFolder() {
         waitForElementVisibleEnabled(baseFolder);
         baseFolder.click();
-        return this;
+//        return this;
     }
 
-    public LoginPage logOut(){
+    public void logOut() {
         waitForElementVisibleEnabled(headerUser);
         headerUser.click();
         waitForElementVisible(exitButton);
         exitButton.click();
-        return new LoginPage();
+//        return new LoginPage();
     }
 
-    public String getFolderName(){
+    public String getFolderName() {
         waitForElementVisible(folderNameElement);
         return folderNameElement.getText();
     }
 
-    public int showCountFilesInFolder(){
+    public int showCountFilesInFolder() {
         waitForElementVisible(folderNameElement);
         return listInFolder.size();
     }
 
-    public void prepareStep() {
+    public void restoreFilesForTesting() {
         recoveryFromTrash();
         goToBaseFolder();
+    }
+
+    public String getLoggedUserName() {
+        return headerUserName.getText();
+    }
+
+    public boolean isUserLogged(String userName) {
+        return getLoggedUserName().contains(userName);
     }
 }
