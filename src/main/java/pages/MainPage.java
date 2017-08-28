@@ -1,8 +1,11 @@
 package pages;
 
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import services.ActionsOnObject;
+import services.Driver;
 import services.Screenshoter;
 
 import java.util.List;
@@ -56,8 +59,6 @@ public class MainPage extends AbstractPage {
     @FindBy(xpath = "//span[@class='header__username']")
     private WebElement headerUserName;
 
-    ActionsOnObject actionsOnObject = new ActionsOnObject();
-
     public void changeView() {
         tileRadioButton.click();
         Screenshoter.takeScreenshot();
@@ -67,32 +68,42 @@ public class MainPage extends AbstractPage {
         return listPicture.get(0).getAttribute("title");
     }
 
-    public void recoveryFromTrash() {
-        actionsOnObject.recoveryPicture(trash, listInFolder, listPicture, restoreButton);
-    }
-
     public void selectItems() {
-        actionsOnObject.selectItemsWithShift(listPicture);
+        ActionsOnObject.selectItemsWithShift(listPicture);
     }
 
 
     public void dragNDropPicture() {
-        actionsOnObject.dragNDropPicture(listPicture, targetFolder, 2);
+        ActionsOnObject.dragNDropPicture(listPicture, targetFolder, 2);
+    }
+
+    private WebElement searchElementbyTitle(String folderName){
+        for (int i = 0; i < listInFolder.size(); i++) {
+            if (listInFolder.get(i).getAttribute("title").contains(folderName)) {
+                return listInFolder.get(i);
+            }
+        }
+            return null;
     }
 
 
     public MainPage openFolder(String folderName) {
-        for (int i = 0; i < listInFolder.size(); i++) {
-            if (listInFolder.get(i).getAttribute("title").contains(folderName)) {
-                actionsOnObject.makeDoubleClicking(listInFolder.get(i));
-            }
-
-        }
+        ActionsOnObject.makeDoubleClicking(searchElementbyTitle(folderName));
+//        for (int i = 0; i < listInFolder.size(); i++) {
+//            if (listInFolder.get(i).getAttribute("title").contains(folderName)) {
+//                ActionsOnObject.makeDoubleClicking(listInFolder.get(i));
+//            }
+//
+//        }
         return this;
     }
 
-    public void dragNDropToTrash() {
-        actionsOnObject.dragNDropPicture(listPicture, trash, 1);
+//    public void dragNDropToTrash() {
+//        ActionsOnObject.dragNDropPicture(listPicture, trash, 1);
+//    }
+
+    public void dragNDropToTrash(String folderName) {
+        ActionsOnObject.dragNDropPicture(listPicture, searchElementbyTitle(folderName), 1);
     }
 
     public void goToBaseFolder() {
@@ -128,5 +139,21 @@ public class MainPage extends AbstractPage {
 
     public boolean isUserLogged(String userName) {
         return getLoggedUserName().contains(userName);
+    }
+
+    public void recoveryFromTrash() {
+        recoveryPicture(trash, listInFolder, listPicture, restoreButton);
+    }
+
+    public void recoveryPicture(WebElement trash, List<WebElement> listInFolder, List<WebElement> listPicture, WebElement restoreButton){
+        ActionsOnObject.makeDoubleClicking(trash);
+        if (listInFolder.size() > 0){
+            waitForElementVisible(listInFolder.get(0));
+            Actions actions = new Actions(Driver.getDriverInstance());
+            actions.click(listInFolder.get(0)).keyDown(Keys.SHIFT).click(listPicture.get(listInFolder.size() - 1)).keyUp(Keys.SHIFT).build().perform();
+            Screenshoter.takeScreenshot();
+            waitForElementVisible(restoreButton);
+            actions.click(restoreButton).build().perform();
+        }
     }
 }

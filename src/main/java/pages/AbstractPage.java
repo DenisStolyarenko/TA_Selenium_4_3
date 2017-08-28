@@ -9,8 +9,8 @@ import services.Driver;
 
 public abstract class AbstractPage {
     private static final int WAIT_FOR_ELEMENT_TIMEOUT_SECONDS = 20;
-    protected String style1 = "'3px solid green'";
-    protected String style0 = "'0px'";
+    protected String border_3PX_green = "'3px solid green'";
+    protected String border_0PX = "'0px'";
 
     protected AbstractPage(){
         PageFactory.initElements(Driver.getDriverInstance(), this);

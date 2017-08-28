@@ -43,7 +43,7 @@ public class YandexDiskTest {
         mainPage.goToBaseFolder();
         int i = mainPage.openFolder("Корзина").showCountFilesInFolder();
         mainPage.goToBaseFolder();
-        mainPage.dragNDropToTrash();
+        mainPage.dragNDropToTrash("Корзина");
         Assert.assertNotEquals(i, i + 1 , "Removing is failed");
     }
 

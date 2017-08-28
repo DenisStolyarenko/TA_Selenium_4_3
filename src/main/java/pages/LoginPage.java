@@ -18,19 +18,20 @@ public class LoginPage extends AbstractPage{
 
     public void login(String BASE_URL, String userName, String pwdName){
         open(BASE_URL);
-        Screenshoter.takeScreenshot();
-        changeHighlightingOfElement(userNameInput, style1);
-        userNameInput.sendKeys(userName);
-        changeHighlightingOfElement(userNameInput, style0);
-        changeHighlightingOfElement(passwordInput, style1);
-        passwordInput.sendKeys(pwdName);
-        changeHighlightingOfElement(passwordInput, style0);
-        changeHighlightingOfElement(loginButton, style1);
+        highlitingOfTextInputField(userNameInput, border_3PX_green, border_0PX, userName);
+        highlitingOfTextInputField(passwordInput, border_3PX_green, border_0PX, pwdName);
+        changeHighlightingOfElement(loginButton, border_3PX_green);
         loginButton.click();
         Screenshoter.takeScreenshot();
     }
 
     public boolean isUserNameInputPresent(){
         return userNameInput.isDisplayed();
+    }
+
+    private void highlitingOfTextInputField(WebElement element, String first_border, String second_border, String string){
+        changeHighlightingOfElement(element, first_border);
+        element.sendKeys(string);
+        changeHighlightingOfElement(element, second_border);
     }
 }
