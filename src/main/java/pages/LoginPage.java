@@ -22,7 +22,6 @@ public class LoginPage extends AbstractPage{
         highlitingOfTextInputField(passwordInput, border_3PX_green, border_0PX, pwdName);
         changeHighlightingOfElement(loginButton, border_3PX_green);
         loginButton.click();
-        Screenshoter.takeScreenshot();
     }
 
     public boolean isUserNameInputPresent(){
@@ -33,5 +32,6 @@ public class LoginPage extends AbstractPage{
         changeHighlightingOfElement(element, first_border);
         element.sendKeys(string);
         changeHighlightingOfElement(element, second_border);
+        Screenshoter.takeScreenshot();
     }
 }
