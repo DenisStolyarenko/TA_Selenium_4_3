@@ -11,26 +11,15 @@ import services.Screenshoter;
 import java.util.List;
 
 public class MainPage extends AbstractPage {
-    @FindBy(xpath = "//input[@class='radio-button__control' and @value='icons']")
-    private WebElement iconsRadioButton;
 
     @FindBy(xpath = "//input[@class='radio-button__control' and @value='tile']")
     private WebElement tileRadioButton;
-
-    @FindBy(xpath = "//input[@class='radio-button__control' and @value='list']")
-    private WebElement listRadioButton;
 
     @FindBy(xpath = "//div[@data-nb='resource' and @data-ext='jpg']")
     private List<WebElement> listPicture;
 
     @FindBy(xpath = "//div[@data-nb='resource']")
     private List<WebElement> listInFolder;
-
-    @FindBy(xpath = "//div[@data-nb='resource' and @title='TestingFolder']")
-    private WebElement targetFolder;
-
-    @FindBy(xpath = "//div[@data-nb='resource' and @title='Корзина']")
-    private WebElement trash;
 
     @FindBy(xpath = "//div[@class='header__user']/span[@class='header__username']")
     private WebElement headerUser;
@@ -64,17 +53,18 @@ public class MainPage extends AbstractPage {
         Screenshoter.takeScreenshot();
     }
 
-    public String getPictureName() {
-        return listPicture.get(0).getAttribute("title");
-    }
+//    public String getPictureName() {
+//        return listPicture.get(0).getAttribute("title");
+//    }
 
     public void selectItems() {
         ActionsOnObject.selectItemsWithShift(listPicture);
     }
 
 
-    public void dragNDropPicture() {
-        ActionsOnObject.dragNDropPicture(listPicture, targetFolder, 2);
+    public void dragNDropPicture(String targetFolder) {
+        waitForElementVisible(searchElementbyTitle(targetFolder));
+        ActionsOnObject.dragNDropPicture(listPicture, searchElementbyTitle(targetFolder), 2);
     }
 
     private WebElement searchElementbyTitle(String folderName){
@@ -89,25 +79,19 @@ public class MainPage extends AbstractPage {
 
     public MainPage openFolder(String folderName) {
         ActionsOnObject.makeDoubleClicking(searchElementbyTitle(folderName));
-//        for (int i = 0; i < listInFolder.size(); i++) {
-//            if (listInFolder.get(i).getAttribute("title").contains(folderName)) {
-//                ActionsOnObject.makeDoubleClicking(listInFolder.get(i));
-//            }
-//
-//        }
         return this;
     }
 
-//    public void dragNDropToTrash() {
-//        ActionsOnObject.dragNDropPicture(listPicture, trash, 1);
-//    }
-
     public void dragNDropToTrash(String folderName) {
+        waitForElementVisible(searchElementbyTitle(folderName));
         ActionsOnObject.dragNDropPicture(listPicture, searchElementbyTitle(folderName), 1);
     }
 
     public void goToBaseFolder() {
         waitForElementVisibleEnabled(baseFolder);
+        System.out.println(Driver.getDriverInstance().getWindowHandle());
+        waitForOpeningOfWindow(Driver.getDriverInstance().getWindowHandle());
+        System.out.println(Driver.getDriverInstance().getWindowHandle());
         baseFolder.click();
     }
 
@@ -118,18 +102,18 @@ public class MainPage extends AbstractPage {
         exitButton.click();
     }
 
-    public String getFolderName() {
-        waitForElementVisible(folderNameElement);
-        return folderNameElement.getText();
-    }
+//    public String getFolderName() {
+//        waitForElementVisible(folderNameElement);
+//        return folderNameElement.getText();
+//    }
 
     public int showCountFilesInFolder() {
         waitForElementVisible(folderNameElement);
         return listInFolder.size();
     }
 
-    public void restoreFilesForTesting() {
-        recoveryFromTrash();
+    public void restoreFilesForTesting(String folderName) {
+        recoveryFromTrash(searchElementbyTitle(folderName));
         goToBaseFolder();
     }
 
@@ -141,7 +125,7 @@ public class MainPage extends AbstractPage {
         return getLoggedUserName().contains(userName);
     }
 
-    public void recoveryFromTrash() {
+    public void recoveryFromTrash(WebElement trash) {
         recoveryPicture(trash, listInFolder, listPicture, restoreButton);
     }
 
