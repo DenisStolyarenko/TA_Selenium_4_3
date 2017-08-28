@@ -47,15 +47,6 @@ public abstract class AbstractPage {
         ((JavascriptExecutor) Driver.getDriverInstance()).executeScript("arguments[0].style.border=" + style, element);
     }
 
-    protected void waitForOpeningOfWindow(final String oldWindowsHandles){
-        new WebDriverWait(Driver.getDriverInstance(), WAIT_FOR_ELEMENT_TIMEOUT_SECONDS).until(new ExpectedCondition<Boolean>() {
-            @Override
-            public Boolean apply(WebDriver driver) {
-                return !Driver.getDriverInstance().getWindowHandles().equals(oldWindowsHandles);
-            }
-        });
-    }
-
     public boolean checkURLofPage(String value){
         return Driver.getDriverInstance().getCurrentUrl().contains(value);
     }

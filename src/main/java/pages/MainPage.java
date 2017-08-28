@@ -53,10 +53,6 @@ public class MainPage extends AbstractPage {
         Screenshoter.takeScreenshot();
     }
 
-//    public String getPictureName() {
-//        return listPicture.get(0).getAttribute("title");
-//    }
-
     public void selectItems() {
         ActionsOnObject.selectItemsWithShift(listPicture);
     }
@@ -89,9 +85,6 @@ public class MainPage extends AbstractPage {
 
     public void goToBaseFolder() {
         waitForElementVisibleEnabled(baseFolder);
-        System.out.println(Driver.getDriverInstance().getWindowHandle());
-        waitForOpeningOfWindow(Driver.getDriverInstance().getWindowHandle());
-        System.out.println(Driver.getDriverInstance().getWindowHandle());
         baseFolder.click();
     }
 
@@ -101,11 +94,6 @@ public class MainPage extends AbstractPage {
         waitForElementVisible(exitButton);
         exitButton.click();
     }
-
-//    public String getFolderName() {
-//        waitForElementVisible(folderNameElement);
-//        return folderNameElement.getText();
-//    }
 
     public int showCountFilesInFolder() {
         waitForElementVisible(folderNameElement);
